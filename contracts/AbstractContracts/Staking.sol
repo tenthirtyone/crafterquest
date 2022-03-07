@@ -44,12 +44,9 @@ contract StakingToken is ERC20, Ownable {
 
         uint256 amountStaked = stakingBalances[msg.sender];
 
+        harvest();
         stakingBalances[msg.sender] = 0;
         stakingBlock[msg.sender] = 0;
-
-        uint256 stakeReward = stakingTokensEarned();
-
-        _mint(msg.sender, stakeReward);
 
         tokenContract.transfer(msg.sender, amountStaked);
     }

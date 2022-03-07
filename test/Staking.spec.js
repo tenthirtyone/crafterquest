@@ -114,6 +114,44 @@ contract("StakingToken", (accounts) => {
     userBalance = await stakingToken.balanceOf.call(user);
     expect(userBalance.toNumber()).to.equal((blocksToMine + 1) * 2 + 1);
   });
+  it("withdraws the staked tokens to user, harvests the reward owed", async () => {
+    const blocksToMine = 100;
+    const tokensToStake = 1;
+    const stakeRewardRate = 1;
+    await resourceToken.approve(stakingToken.address, tokensToStake, {
+      from: user,
+    });
+
+    await stakingToken.setStakeRewardPerBlock(stakeRewardRate);
+    await stakingToken.stake(tokensToStake, { from: user });
+
+    let userResourceTokenBalance = await resourceToken.balanceOf(user);
+    expect(userResourceTokenBalance.toNumber()).to.equal(
+      faucetAmount - tokensToStake
+    );
+
+    await mineNBlocks(blocksToMine);
+
+    await stakingToken.withdraw({ from: user });
+
+    let userBalance = await stakingToken.balanceOf.call(user);
+    let reward = await stakingToken.stakingTokensEarned.call({ from: user });
+    expect(reward.toNumber()).to.equal(0);
+    expect(userBalance.toNumber()).to.equal(blocksToMine + 1); // harvest call advances 1 block;
+
+    await mineNBlocks(blocksToMine);
+
+    reward = await stakingToken.stakingTokensEarned.call({ from: user });
+    expect(reward.toNumber()).to.equal(0);
+
+    userResourceTokenBalance = await resourceToken.balanceOf(user);
+    expect(userResourceTokenBalance.toNumber()).to.equal(faucetAmount);
+
+    const stakingResourceTokenBalance = await resourceToken.balanceOf(
+      stakingToken.address
+    );
+    expect(stakingResourceTokenBalance.toNumber()).to.equal(0);
+  });
   describe("helpers", () => {
     it("mines new block", async () => {
       const blocksToMine = 100;
