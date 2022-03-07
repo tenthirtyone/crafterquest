@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract StakingToken is ERC20, Ownable {
     IERC20 immutable tokenContract;
-    uint256 stakeRewardPerBlock = 100000;
+    uint256 stakeRewardPerBlock = 1;
 
     // account to amount transferred to contract
     mapping(address => uint256) stakingBalances;
@@ -25,7 +25,7 @@ contract StakingToken is ERC20, Ownable {
 
     function stake(uint256 amount) public {
         if (stakingBalances[msg.sender] != 0) {
-            revert("user is already staking");
+            revert("account is already staking");
         }
         // prevent re-entrancy
         stakingBalances[msg.sender] = amount;
@@ -35,23 +35,40 @@ contract StakingToken is ERC20, Ownable {
 
     function withdraw() public {
         if (stakingBalances[msg.sender] == 0) {
-            revert("user is not staking");
+            revert("account is not staking");
         }
 
         if (stakingBlock[msg.sender] == 0) {
-            revert("user is not staking");
+            revert("account is not staking");
         }
 
-        uint256 amount = stakingBalances[msg.sender];
-        uint256 totalBlocksStaked = block.number - stakingBlock[msg.sender];
+        uint256 amountStaked = stakingBalances[msg.sender];
 
         stakingBalances[msg.sender] = 0;
         stakingBlock[msg.sender] = 0;
 
-        uint256 stakeReward = totalBlocksStaked * stakeRewardPerBlock;
+        uint256 stakeReward = stakingTokensEarned();
 
         _mint(msg.sender, stakeReward);
 
-        tokenContract.transfer(msg.sender, amount);
+        tokenContract.transfer(msg.sender, amountStaked);
+    }
+
+    function stakingTokensEarned() public view returns (uint256) {
+        uint256 amountStaked = stakingBalances[msg.sender];
+        uint256 totalBlocksStaked = block.number - stakingBlock[msg.sender];
+
+        uint256 stakeReward = (totalBlocksStaked * stakeRewardPerBlock) *
+            amountStaked;
+
+        return stakeReward;
+    }
+
+    // mint tokens without withdrawing stake
+    function harvest() public returns (uint256) {
+        uint256 stakeReward = stakingTokensEarned();
+        stakingBlock[msg.sender] = block.number;
+        _mint(msg.sender, stakeReward);
+        return stakeReward;
     }
 }
