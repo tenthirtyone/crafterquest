@@ -1,47 +1,42 @@
-const ResourceToken = artifacts.require("ResourceToken");
+const MockResourceToken = artifacts.require("RESToken");
+const { expect } = require("chai");
 
 contract("ResourceToken", (accounts) => {
   const [creator, user, anotherUser, operator, mallory] = accounts;
-
-  const initialSupply = 2e8;
-
-  const tokens = [
-    {
-      initialSupply,
-      name: "Ore",
-      symbol: "ORE",
-      contract: null,
-    },
-    {
-      initialSupply,
-      name: "Lumber",
-      symbol: "LUM",
-      contract: null,
-    },
-    {
-      initialSupply,
-      name: "Leather",
-      symbol: "LEA",
-      contract: null,
-    },
-    {
-      initialSupply,
-      name: "Ruins",
-      symbol: "RUI",
-      contract: null,
-    },
-  ];
+  let resourceToken;
+  const address = "0x2C2B9C9a4a25e24B174f26114e8926a9f2128FE4";
 
   beforeEach(async () => {
-    for (let i = 0; i < tokens.length; i++) {
-      const { initialSupply, name, symbol } = tokens[i];
-      console.log(initialSupply, name, symbol);
-      tokens[i].contract = await ResourceToken.new(initialSupply, name, symbol);
-    }
+    resourceToken = await MockResourceToken.new();
   });
 
   it("deployed", async () => {
-    console.log(accounts);
-    console.log(tokens[1].contract.address);
+    expect(resourceToken.address).to.equal(address);
+  });
+
+  it("has a faucet", async () => {
+    const faucetAmount = 1e10;
+    await resourceToken.faucet.sendTransaction(faucetAmount, { from: user });
+
+    const userBalance = await resourceToken.balanceOf.call(user);
+
+    expect(userBalance.toNumber()).to.equal(faucetAmount);
+  });
+
+  it("approve another address for transfer", async () => {
+    const faucetAmount = 1e10;
+    await resourceToken.faucet.sendTransaction(faucetAmount, { from: user });
+
+    await resourceToken.approve(anotherUser, faucetAmount, { from: user });
+
+    await resourceToken.transferFrom(user, anotherUser, faucetAmount, {
+      from: anotherUser,
+    });
+
+    const userBalance = await resourceToken.balanceOf.call(user);
+    const anotherUserBalance = await resourceToken.balanceOf.call(anotherUser);
+
+    expect(userBalance.toNumber()).to.equal(0);
+    expect(anotherUserBalance.toNumber()).to.equal(faucetAmount);
   });
 });

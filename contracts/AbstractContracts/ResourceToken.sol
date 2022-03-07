@@ -9,7 +9,9 @@ contract ResourceToken is ERC20 {
         uint256 initialSupply,
         string memory tokenName,
         string memory tokenSymbol
-    ) ERC20(tokenName, tokenSymbol) {
-        _mint(msg.sender, initialSupply);
+    ) ERC20(tokenName, tokenSymbol) {}
+
+    function faucet(uint256 amount) public {
+        _mint(msg.sender, amount);
     }
 }
