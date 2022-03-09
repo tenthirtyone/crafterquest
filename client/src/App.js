@@ -1,23 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
-
+import logo from "./logo.svg";
+import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import Container from "@mui/material/Container";
+import TopBar from "./components/TopBar";
+import Resources from "./components/Resources";
+import Recipes from "./components/Recipes";
+import Inventory from "./components/Inventory";
+import Hero from "./components/Hero";
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TopBar />
+      <Hero />
+      <Container maxWidth="lg">
+        <Routes>
+          <Route path="/" element={<Resources />} />
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/recipes" element={<Recipes />} />
+          <Route path="/inventory" element={<Inventory />} />
+        </Routes>
+      </Container>
     </div>
   );
 }
