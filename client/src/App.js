@@ -17,6 +17,9 @@ function App() {
 
   window.provider = provider;
 
+  provider.on("accountsChanged", (_) => window.location.reload());
+  provider.on("chainChanged", (_) => window.location.reload());
+
   return (
     <ProviderContext.Provider value={provider}>
       <div className="App">

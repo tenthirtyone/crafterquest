@@ -34,6 +34,7 @@ function formatAccount(account) {
 
 async function getAccounts(provider, setAccount) {
   const accounts = await provider.send("eth_requestAccounts", []);
+
   setAccount(accounts[0]);
 }
 
