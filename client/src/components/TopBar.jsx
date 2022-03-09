@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -9,6 +9,8 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import { Link } from "react-router-dom";
+import ProviderContext from "../ProviderContext";
+import Button from "@mui/material/Button";
 
 const linkStyle = {
   margin: "1em",
@@ -24,8 +26,25 @@ const activeLinkStyle = {
   borderBottom: "solid",
 };
 
+function formatAccount(account) {
+  if (!account) return "";
+
+  return account.slice(0, 4) + "..." + account.slice(-4);
+}
+
+async function getAccounts(provider, setAccount) {
+  const accounts = await provider.send("eth_requestAccounts", []);
+  setAccount(accounts[0]);
+}
+
 const TopBar = () => {
   const [activePage, setActivePage] = useState("resources");
+  const [account, setAccount] = useState(null);
+  const provider = useContext(ProviderContext);
+
+  useEffect(() => {
+    getAccounts(provider, setAccount);
+  }, []);
 
   return (
     <AppBar position="static" style={{ backgroundColor: "rgba(0,0,0,1)" }}>
@@ -65,30 +84,28 @@ const TopBar = () => {
               Resources
             </Link>
             <Link
-              style={activePage === "recipes" ? activeLinkStyle : linkStyle}
+              style={activePage === "crafting" ? activeLinkStyle : linkStyle}
               onClick={() => {
-                setActivePage("recipes");
+                setActivePage("crafting");
               }}
-              to="/recipes"
+              to="/crafting"
             >
-              Recipes
-            </Link>
-            <Link
-              style={activePage === "inventory" ? activeLinkStyle : linkStyle}
-              onClick={() => {
-                setActivePage("inventory");
-              }}
-              to="/inventory"
-            >
-              Inventory
+              Crafting
             </Link>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
+            <Tooltip title={account || ""}>
+              <Button
+                variant="outlined"
+                sx={{
+                  padding: "4px",
+                  backgroundColor: "#222222",
+                  borderRadius: 0,
+                }}
+              >
+                {formatAccount(account)}
+              </Button>
             </Tooltip>
           </Box>
         </Toolbar>
