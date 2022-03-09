@@ -5,6 +5,7 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import { GiOre, GiAnimalHide, GiForest, GiGems } from "react-icons/gi";
+import CrafterLevel from "./CrafterLevel";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -62,7 +63,7 @@ export default function BasicGrid() {
       sx={{ flexGrow: 1 }}
       style={{
         backgroundColor: "rgba(0,0,0,1)",
-        height: "300px",
+        height: "400px",
         color: "#00aeef",
         display: "flex",
         alignItems: "center",
@@ -84,6 +85,7 @@ export default function BasicGrid() {
             <ResourceCircle type={"gems"} color={"#9016c0"} value={250} />
           </Grid>
         </Grid>
+        <CrafterLevel />
       </Container>
     </Box>
   );
