@@ -38,7 +38,10 @@ contract("StakingToken", (accounts) => {
 
   beforeEach(async () => {
     resourceToken = await MockResourceToken.new();
-    stakingToken = await MockStakingToken.new(resourceToken.address);
+    stakingToken = await MockStakingToken.new(
+      resourceToken.address,
+      resourceToken.address
+    ); // Dont worry about crafting contract here
 
     await resourceToken.faucet.sendTransaction(faucetAmount, { from: user });
   });

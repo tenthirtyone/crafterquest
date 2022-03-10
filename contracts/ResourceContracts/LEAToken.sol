@@ -4,5 +4,5 @@ pragma solidity ^0.8.0;
 import "../AbstractContracts/ResourceToken.sol";
 
 contract LEAToken is ResourceToken {
-    constructor() ResourceToken(200000000, "Leather Token", "LEA") {}
+    constructor() ResourceToken("Leather Token", "LEA") {}
 }
