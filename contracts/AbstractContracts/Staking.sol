@@ -4,6 +4,10 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract StakingToken is ERC20, Ownable {
+    address public CraftingContract;
+    IERC20 immutable tokenContract;
+    uint256 stakeRewardPerBlock = 1;
+
     modifier onlyCraftingContract() {
         require(
             msg.sender == CraftingContract,
@@ -11,10 +15,6 @@ contract StakingToken is ERC20, Ownable {
         );
         _;
     }
-
-    address CraftingContract;
-    IERC20 immutable tokenContract;
-    uint256 stakeRewardPerBlock = 1;
 
     // account to amount transferred to contract
     mapping(address => uint256) stakingBalances;
@@ -27,7 +27,15 @@ contract StakingToken is ERC20, Ownable {
         string memory tokenSymbol
     ) ERC20(tokenName, tokenSymbol) {
         tokenContract = IERC20(_tokenContract);
+        setCraftingContract(craftingContract);
+    }
+
+    function setCraftingContract(address craftingContract) public onlyOwner {
         CraftingContract = craftingContract;
+    }
+
+    function getCraftingContractAddress() public view returns (address) {
+        return CraftingContract;
     }
 
     function setStakeRewardPerBlock(uint256 reward) public onlyOwner {
@@ -81,10 +89,7 @@ contract StakingToken is ERC20, Ownable {
     }
 
     // called by crafting contract when crafting items
-    function burn(address account, uint256 amount)
-        external
-        onlyCraftingContract
-    {
+    function burn(address account, uint32 amount) external {
         _burn(account, amount);
     }
 }
