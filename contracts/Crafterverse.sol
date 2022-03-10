@@ -6,12 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
-contract CrafterverseItem is
-    Ownable,
-    ERC721,
-    ERC721Enumerable,
-    ERC721URIStorage
-{
+contract Crafterverse is Ownable, ERC721, ERC721Enumerable, ERC721URIStorage {
     struct Item {
         string name;
         address[] ingredients;
@@ -23,7 +18,7 @@ contract CrafterverseItem is
     Item[] public recipes;
     Item[] public items;
 
-    constructor() ERC721("CrafterverseItem", "CVI") {}
+    constructor() ERC721("Crafterverse", "CV") {}
 
     function addRecipe(
         string memory name,
