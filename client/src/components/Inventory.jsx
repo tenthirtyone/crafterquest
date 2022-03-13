@@ -17,7 +17,10 @@ import {
   GiBattleAxe,
   GiScrollQuill,
 } from "react-icons/gi";
-
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 async function getAccounts(provider, setAccount) {
   const accounts = await provider.send("eth_requestAccounts", []);
 
@@ -64,6 +67,7 @@ function InventoryItem() {
 
 export default function NestedList() {
   const [open, setOpen] = React.useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const [itemUpdater, setItemUpdater] = useState(null);
   const contracts = useContext(ContractContext);
@@ -71,7 +75,7 @@ export default function NestedList() {
   const [account, setAccount] = useState(null);
   const [recipes, setRecipes] = useState([]);
   const [items, setItems] = useState([]);
-
+  const handleClose = () => setShowModal(false);
   const handleClick = (listName) => {
     if (open === listName) {
       setOpen("");
@@ -106,6 +110,51 @@ export default function NestedList() {
           "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
       }}
     >
+      <Modal
+        open={showModal}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            border: "2px solid #000",
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <TextField
+            label="name"
+            variant="standard"
+            style={{ width: "100%" }}
+          />
+          <TextField
+            label="description"
+            variant="standard"
+            style={{ width: "100%" }}
+          />
+          <TextField
+            label="image"
+            variant="standard"
+            style={{ width: "100%" }}
+          />
+          <br />
+          <Button>Save</Button>
+          <Button
+            onClick={() => {
+              setShowModal(false);
+            }}
+          >
+            Close
+          </Button>
+        </Box>
+      </Modal>
       <List
         sx={{ width: "100%" }}
         component="nav"
@@ -149,7 +198,13 @@ export default function NestedList() {
               .map((item, index) => {
                 const recipe = recipes[item.id.toNumber()];
                 return (
-                  <ListItemButton key={index} sx={{ pl: 4 }}>
+                  <ListItemButton
+                    key={index}
+                    sx={{ pl: 4 }}
+                    onClick={() => {
+                      setShowModal(true);
+                    }}
+                  >
                     <ListItemIcon></ListItemIcon>
                     <ListItemText primary={recipe.name} />
                   </ListItemButton>
