@@ -60,6 +60,17 @@ contract Crafterverse is Ownable, ERC721, ERC721Enumerable, ERC721URIStorage {
         _safeMint(msg.sender, tokenId);
     }
 
+    function craftItemWithURI(
+        uint256 id,
+        uint8 rank,
+        string memory _tokenURI
+    ) public {
+        craftItem(id, rank);
+
+        uint256 tokenId = items.length - 1;
+        _setTokenURI(tokenId, _tokenURI);
+    }
+
     function totalRecipes() public view returns (uint256) {
         return recipes.length;
     }

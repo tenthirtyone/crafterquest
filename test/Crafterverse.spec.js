@@ -34,6 +34,8 @@ contract("Crafterverse", (accounts) => {
   let crafterverse, resourceToken, stakingToken;
   const address = "0x2C2B9C9a4a25e24B174f26114e8926a9f2128FE4";
   const faucetAmount = 1e10;
+  const ipfsHash =
+    "ipfs://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi";
 
   const recipeName = "Steel Dagger";
 
@@ -72,13 +74,31 @@ contract("Crafterverse", (accounts) => {
 
     totalRecipes = await crafterverse.totalRecipes();
 
-    console.log(stakingToken.address);
-    console.log(await stakingToken.getCraftingContractAddress());
-    console.log((await stakingToken.balanceOf(user)).toNumber());
-    console.log((await crafterverse.balanceOf(user)).toNumber());
-
     await crafterverse.craftItem(0, 1, { from: user });
-    console.log((await stakingToken.balanceOf(user)).toNumber());
-    console.log((await crafterverse.balanceOf(user)).toNumber());
+  });
+
+  it.only("crafts an item and stores an IPFS in the tokenURI", async () => {
+    // Harvest some resources
+
+    await resourceToken.approve(stakingToken.address, faucetAmount, {
+      from: user,
+    });
+    await stakingToken.stake(faucetAmount, { from: user });
+
+    await mineNBlocks(1000);
+    await stakingToken.harvest({ from: user });
+
+    let totalRecipes = await crafterverse.totalRecipes();
+
+    await crafterverse.addRecipe(
+      recipeName,
+      stakingToken.address,
+      recipeAmount,
+      recipeSkill
+    );
+
+    totalRecipes = await crafterverse.totalRecipes();
+
+    await crafterverse.craftItemWithURI(0, 1, ipfsHash, { from: user });
   });
 });

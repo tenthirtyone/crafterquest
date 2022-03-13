@@ -4,14 +4,9 @@ const { expect } = require("chai");
 contract("ResourceToken", (accounts) => {
   const [creator, user, anotherUser, operator, mallory] = accounts;
   let resourceToken;
-  const address = "0x2C2B9C9a4a25e24B174f26114e8926a9f2128FE4";
 
   beforeEach(async () => {
     resourceToken = await MockResourceToken.new();
-  });
-
-  it("deployed", async () => {
-    expect(resourceToken.address).to.equal(address);
   });
 
   it("has a faucet", async () => {

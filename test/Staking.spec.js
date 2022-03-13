@@ -32,8 +32,7 @@ contract("StakingToken", (accounts) => {
   const [creator, user, anotherUser, operator, mallory] = accounts;
   let resourceToken;
   let stakingToken;
-  const resourceAddress = "0x2C2B9C9a4a25e24B174f26114e8926a9f2128FE4";
-  const stakingAddress = "0x30753E4A8aad7F8597332E813735Def5dD395028";
+
   const faucetAmount = 1e10;
 
   beforeEach(async () => {
@@ -44,11 +43,6 @@ contract("StakingToken", (accounts) => {
     ); // Dont worry about crafting contract here
 
     await resourceToken.faucet.sendTransaction(faucetAmount, { from: user });
-  });
-
-  it("deployed", async () => {
-    expect(resourceToken.address).to.equal(resourceAddress);
-    expect(stakingToken.address).to.equal(stakingAddress);
   });
 
   it("approves and transfers resource tokens into the staking contract", async () => {
