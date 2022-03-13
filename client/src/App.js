@@ -70,7 +70,6 @@ function App() {
     setcLumContract(new ethers.Contract(cLumAddr, cLumABI, signer));
     setcLeaContract(new ethers.Contract(cLeaAddr, cLeaABI, signer));
     setcGemContract(new ethers.Contract(cGemAddr, cGemABI, signer));
-    console.log(provider);
   }, []);
 
   window.provider = provider;

@@ -112,7 +112,7 @@ export default function BasicGrid() {
         setUpdater(
           setInterval(() => {
             getBalances(contracts, account, setBalances);
-          }, 5000)
+          }, 1000)
         );
       }
     }

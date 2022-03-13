@@ -41,7 +41,7 @@ async function getCraftingRecipes(contract, setRecipes) {
     const recipe = await contract.recipes(i);
     recipes.push(recipe);
   }
-  console.log(recipes);
+
   setRecipes(
     recipes.map((recipe, index) => {
       return {

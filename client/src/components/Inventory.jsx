@@ -32,7 +32,7 @@ async function getCraftedItems(contract, account, setItems) {
 
     items.push(item);
   }
-  console.log(items);
+
   setItems(items);
 }
 
@@ -87,7 +87,7 @@ export default function NestedList() {
       if (!itemUpdater) {
         setInterval(() => {
           getCraftedItems(contracts.crafterverseContract, account, setItems);
-        }, 5000);
+        }, 1000);
       }
     }
     if (contracts) {

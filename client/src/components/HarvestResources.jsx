@@ -140,7 +140,7 @@ export default function BasicTable({ title }) {
         setUpdater(
           setInterval(() => {
             getBalances(contracts, account, setBalances);
-          }, 5000)
+          }, 1000)
         );
       }
     }
