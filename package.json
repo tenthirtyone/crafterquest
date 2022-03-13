@@ -1,7 +1,10 @@
 {
+  "type": "module",
   "dependencies": {
     "@openzeppelin/contracts": "^4.5.0",
+    "body-parser": "^1.19.2",
     "chai": "^4.3.6",
+    "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "web3": "^1.7.1",
     "web3-eth-contract": "^1.7.1",
