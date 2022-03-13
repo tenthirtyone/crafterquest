@@ -40,7 +40,7 @@ async function getAccounts(provider, setAccount) {
 
 const TopBar = () => {
   const [activePage, setActivePage] = useState("resources");
-  const [account, setAccount] = useState(null);
+  const [account, setAccount] = useState("Unlock Wallet");
   const provider = useContext(ProviderContext);
 
   useEffect(() => {
