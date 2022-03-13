@@ -24,6 +24,16 @@ const HDWalletProvider = require("@truffle/hdwallet-provider");
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
 const mnemonic =
   "any tennis nature venue topple brain major fatigue bid powder gun embody";
+
+// I truly do not care about testnet mnemonics. This paradigm is old and broken anyway
+const maticMnemonic =
+  "receive fury leg toast damage index close cool corn grunt spider bomb";
+
+const maticProvider = new HDWalletProvider(
+  maticMnemonic,
+  `https://rpc-mumbai.maticvigil.com`
+);
+
 module.exports = {
   /**
    * Networks define how you connect to your ethereum client and let you set the
@@ -42,6 +52,17 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
+    matic: {
+      provider: () =>
+        new HDWalletProvider(
+          maticMnemonic,
+          `https://rpc-mumbai.maticvigil.com`
+        ),
+      network_id: 80001,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+    },
     ganache: {
       host: "127.0.0.1", // Localhost (default: none)
       port: 8545, // Standard Ethereum port (default: none)
