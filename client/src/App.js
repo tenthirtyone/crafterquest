@@ -11,6 +11,10 @@ import { ethers } from "ethers";
 import ProviderContext from "./ProviderContext";
 import ContractContext from "./ContractContext";
 
+const crafterverseABI = require("./artifacts/Crafterverse.json").abi;
+const crafterverseAddress = require("./artifacts/Crafterverse.json")
+  .networks[80001].address;
+
 const oreABI = require("./artifacts/OREToken").abi;
 const oreAddr = require("./artifacts/OREToken").networks[80001].address;
 const cOreABI = require("./artifacts/cOREToken").abi;
@@ -36,6 +40,7 @@ function App() {
     new ethers.providers.Web3Provider(window.ethereum)
   );
 
+  const [crafterverseContract, setCrafterverseContract] = useState(null);
   const [oreContract, setOreContract] = useState(null);
   const [lumContract, setLumContract] = useState(null);
   const [leaContract, setLeaContract] = useState(null);
@@ -51,6 +56,11 @@ function App() {
       window.ethereum
     ).getSigner();
     setProvider(provider);
+
+    setCrafterverseContract(
+      new ethers.Contract(crafterverseAddress, crafterverseABI, signer)
+    );
+
     setOreContract(new ethers.Contract(oreAddr, oreABI, signer));
     setLumContract(new ethers.Contract(lumAddr, lumABI, signer));
     setLeaContract(new ethers.Contract(leaAddr, leaABI, signer));
@@ -65,6 +75,7 @@ function App() {
 
   window.provider = provider;
   const contracts = {
+    crafterverseContract,
     oreContract,
     lumContract,
     leaContract,

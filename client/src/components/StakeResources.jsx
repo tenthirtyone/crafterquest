@@ -101,8 +101,6 @@ export default function BasicTable({ title }) {
       if (!updater) {
         setUpdater(
           setInterval(() => {
-            console.log("getting balances staking");
-
             getBalances(contracts, account, setBalances);
           }, 5000)
         );

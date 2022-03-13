@@ -139,8 +139,6 @@ export default function BasicTable({ title }) {
       if (!updater) {
         setUpdater(
           setInterval(() => {
-            console.log("getting balances harvesting");
-
             getBalances(contracts, account, setBalances);
           }, 5000)
         );

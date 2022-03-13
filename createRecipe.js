@@ -1,5 +1,5 @@
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const crafterverseABI = require("./artifacts/Crafterverse.json").abi;
+const crafterverseABI = require("./client/src/artifacts/Crafterverse.json").abi;
 const crafterverseAddress = "0x70CA9EA9200474b1078621834b27c3dfc348C30b";
 const Contract = require("web3-eth-contract");
 
@@ -27,10 +27,13 @@ Contract.setProvider(provider);
 
 const contract = new Contract(crafterverseABI, crafterverseAddress);
 
-console.log(contract);
-
 contract.methods
-  .addRecipe("Steel Axe", "0x0249b1d3F03C3b67FC1c5cfd21fd1720f34e346f", 10, 10)
+  .addRecipe(
+    "Magic Scroll",
+    "0x45f238447083ebF25Fd084D79E9E280ed86AC16e",
+    10,
+    10
+  )
   .send({ from: "0x8d0726f5b95bec4d1048ca8ef919b0fcbcafbe2b" })
   .on("receipt", function (receipt) {
     console.log(receipt);

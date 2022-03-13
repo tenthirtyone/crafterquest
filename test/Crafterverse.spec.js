@@ -50,24 +50,7 @@ contract("Crafterverse", (accounts) => {
 
     await resourceToken.faucet.sendTransaction(faucetAmount, { from: user });
   });
-  /*
-  it("deployed", async () => {
-    expect(crafterverse.address).to.equal(address);
-  });
 
-  it("has an owner", async () => {
-    expect(await crafterverse.owner()).to.equal(creator);
-  });
-
-  it("adds a recipe", async () => {
-    await crafterverse.addRecipe(
-      recipeName,
-      stakingToken.address,
-      recipeAmount,
-      recipeSkill
-    );
-  });
-  */
   it("crafts a recipe", async () => {
     // Harvest some resources
     await resourceToken.approve(stakingToken.address, faucetAmount, {

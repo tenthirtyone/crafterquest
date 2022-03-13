@@ -111,7 +111,6 @@ export default function BasicGrid() {
       if (!updater) {
         setUpdater(
           setInterval(() => {
-            console.log("getting balances");
             getBalances(contracts, account, setBalances);
           }, 5000)
         );
